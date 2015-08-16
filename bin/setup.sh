@@ -3,8 +3,9 @@ function install(){
 }
 
 function which_install(){
-  if [ -z "$2" ]; then
-    $2="$1"
+  check="$2"
+  if [ -z "$check" ]; then
+    check="$1"
   fi
 
   if ! which $2; then
@@ -19,17 +20,30 @@ if ! which docker; then
   curl -sSL https://get.docker.com/ | sh
 fi
 
-docker_user=ubuntu
+user=nickel
+user_home=/home/$user
 
-if cat /etc/passwd | grep "vagrant"; then
-  docker_user=vagrant
+# setup nickel user
+if ! cat /etc/passwd | grep $user; then
+  useradd -m --home $user_home --groups sudo $user
+
+  # setup a simple password
+  echo "$user:$user" | chpasswd
+  echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 fi
 
-if ! groups "$docker_user" | grep "docker"; then
-  usermod -aG docker "$docker_user"
+# make sure that docker can be run by the user
+if ! groups "$user" | grep "docker"; then
+  usermod -aG docker "$user"
 fi
 
 which_install tmux
 which_install git
 
+# user ssh config
+mkdir -p $user_home/.ssh/
+cp /vagrant/files/authorized_keys $user_home/.ssh/authorized_keys
+
+# user terminal config
 cp -r /vagrant/files/bash_completion.d/* /etc/bash_completion.d/
+cp /vagrant/files/bash_profile $user_home/.bash_profile
