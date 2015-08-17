@@ -3,6 +3,7 @@
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
+username = "nickel"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider :virtualbox do |vb, override|
@@ -12,6 +13,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     override.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
 
     override.vm.network :private_network, ip: "33.33.33.10"
+
+    # NOTE this mount only happens on the local instance, the
+    # repositories that make up the projects directory should
+    # otherwise be cloned directly
+    override.vm.synced_folder "projects", "/home/#{username}/projects"
   end
 
   config.vm.provider :aws do |aws, override|
@@ -37,5 +43,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     override.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/"
   end
 
-  config.vm.provision :shell, :path => "bin/setup.sh"
+  config.vm.provision :shell, :path => "bin/setup.sh", :args => username
 end

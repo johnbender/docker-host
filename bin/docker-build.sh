@@ -16,5 +16,5 @@ if ! docker build -t "$1" "$2"; then
     | grep "Exited ([^0])" \
     | cut -d' ' -f1 \
     | xargs -n1 docker rm \
-     > /dev/null
+    > /dev/null
 fi
