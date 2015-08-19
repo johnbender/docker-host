@@ -23,7 +23,7 @@ if ! which docker; then
 fi
 
 if ! cat /etc/passwd | grep "$user"; then
-  useradd -m --home "$user_home" --groups sudo "$user"
+  useradd -m --home "$user_home" --groups sudo "$user" --shell /bin/bash
 
   # setup a simple password
   echo "$user:$user" | chpasswd

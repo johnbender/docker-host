@@ -39,6 +39,4 @@ prompt_color() {
 # Prevent "dumb" terminals from getting colors, e.g. Tramp
 if [ $TERM != "dumb" ] && [ -n "$PS1" ]; then
   prompt_color
-  # eval `dircolors ~/.dir_colors`
-  # alias ls='ls --color=auto'
 fi

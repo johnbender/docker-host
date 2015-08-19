@@ -25,22 +25,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     override.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
 
     override.ssh.username = "ubuntu"
-    aws.instance_type = "m4.xlarge"
+    aws.instance_type = "t2.medium"
 
     aws.access_key_id = ENV['AWS_KEY']
     aws.secret_access_key = ENV['AWS_SECRET']
 
-    override.ssh.private_key_path = "~/.ssh/aws/nickeluswest2.pem"
-    aws.keypair_name = "nickel us west 2"
+    override.ssh.private_key_path = "~/.ssh/aws/nickeluswest1.pem"
+    aws.keypair_name = "nickel us west 1"
 
-    # AMI sourced from canonical/ubuntu
+    # AMI sourced from canonical/ubuntu, us-west-1
     # http://cloud-images.ubuntu.com/releases/14.04.3/release-20150814/
-    aws.ami = "ami-afd5c09f"
+    aws.ami = "ami-896d93cd"
 
-    aws.region = "us-west-2"
-    aws.security_groups = ["secure-shell"]
+    aws.region = "us-west-1"
+    aws.security_groups = ["ssh", "web"]
 
-    override.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/"
+    rsync_opts = { type: "rsync", rsync__exclude: [ ".git/", "projects"] }
+    override.vm.synced_folder ".", "/vagrant", rsync_opts
   end
 
   config.vm.provision :shell, :path => "bin/setup.sh", :args => username
