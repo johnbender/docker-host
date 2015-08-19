@@ -6,7 +6,7 @@ alias "$docker_prefix"clni='docker rmi $(docker images -q -f dangling=true)'
 alias "$docker_prefix"i='docker images'
 alias "$docker_prefix"ps='docker ps'
 alias "$docker_prefix"psa='docker ps -a'
-alias "$docker_prefix"rmall='dpsa | cut -d' ' -f1 | tail -n +2 | xargs -n1 docker rm -f'
+alias "$docker_prefix"rmall="dpsa | cut -d' ' -f1 | tail -n +2 | xargs -n1 docker rm -f"
 alias dc='docker-compose'
 
 # git aliases
